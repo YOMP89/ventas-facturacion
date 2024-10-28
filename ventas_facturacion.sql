@@ -58,3 +58,26 @@ INSERT INTO Facturas (cliente_id, fecha_factura, total) VALUES
 INSERT INTO DetallesVentas (factura_id, producto_id, cantidad, precio_unitario) VALUES 
 (1, 1, 2, 699.99),  -- Ana compró 2 Laptops
 (2, 2, 1, 399.99);   -- Luis compró 1 Smartphone
+
+-- Listar todos los clientes
+SELECT * FROM Clientes;
+
+-- Verificar el stock de productos
+SELECT nombre, stock FROM Productos;
+
+-- Consultar facturas con sus clientes y montos totales
+SELECT F.factura_id, C.nombre AS Cliente, F.fecha_factura, F.total
+FROM Facturas F
+JOIN Clientes C ON F.cliente_id = C.cliente_id;
+
+-- Consultar detalles de una factura específica
+SELECT DV.detalle_id, P.nombre AS Producto, DV.cantidad, DV.precio_unitario, (DV.cantidad * DV.precio_unitario) AS Subtotal
+FROM DetallesVentas DV
+JOIN Productos P ON DV.producto_id = P.producto_id
+WHERE DV.factura_id = 1;  -- Detalles de la factura con ID 1
+
+-- Calcular ingresos totales por producto
+SELECT P.nombre AS Producto, SUM(DV.cantidad * DV.precio_unitario) AS IngresosTotales
+FROM DetallesVentas DV
+JOIN Productos P ON DV.producto_id = P.producto_id
+GROUP BY P.nombre;
